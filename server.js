@@ -39,6 +39,9 @@ app.post('/recommend', async (req, res) => {
   }
 
   try {
+    // Ensure dependencies are installed
+    // Run in shell: npm install express cors axios cheerio xml2js
+
     const candidates = await getCandidates();
     console.log('Loaded candidates count:', candidates.length);
 
