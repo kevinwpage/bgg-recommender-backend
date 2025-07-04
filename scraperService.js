@@ -1,6 +1,6 @@
-// scraperService.js — Corrected cheerio import for ES Modules
+// scraperService.js — Corrected for Cheerio ESM import and load
 import axios from 'axios';
-import * as cheerio from 'cheerio';
+import { load } from 'cheerio';
 import xml2js from 'xml2js';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,13 +13,15 @@ const XML_PARSER = new xml2js.Parser({ explicitArray: false });
 async function scrapeBrowsePage(page) {
   const url = `https://boardgamegeek.com/browse/boardgame/page/${page}`;
   const html = (await axios.get(url)).data;
-  const $ = cheerio.load(html);
-  return $('.collection_table .collection_thumbnail').map((i, el) => {
-    const href = $(el).parent().attr('href');
-    const id = href.split('/')[2];
-    const image = $(el).find('img').attr('src');
-    return { id, image };
-  }).get();
+  const $ = load(html);
+  return $('.collection_table .collection_thumbnail')
+    .map((i, el) => {
+      const href = $(el).parent().attr('href');
+      const id = href.split('/')[2];
+      const image = $(el).find('img').attr('src');
+      return { id, image };
+    })
+    .get();
 }
 
 // Fetch BGG XML details for one game ID
@@ -72,8 +74,7 @@ export async function getCandidates() {
       const json = await fs.readFile(CACHE_FILE, 'utf-8');
       return JSON.parse(json);
     }
-  } catch {}
+  } catch {};
   // cache missing or stale
   return await buildCandidates();
 }
-
