@@ -1,4 +1,7 @@
-{
+"type": "module",
+"scripts": {
+  "start": "node server.js"
+},
   {
   "name": "backend-setup",
   "version": "1.0.0",
