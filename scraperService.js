@@ -1,6 +1,6 @@
-// scraperService.js — Corrected for Cheerio ESM import and load
+// scraperService.js — Corrected Cheerio import for ESM
 import axios from 'axios';
-import { load } from 'cheerio';
+import * as cheerio from 'cheerio';
 import xml2js from 'xml2js';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,7 +13,7 @@ const XML_PARSER = new xml2js.Parser({ explicitArray: false });
 async function scrapeBrowsePage(page) {
   const url = `https://boardgamegeek.com/browse/boardgame/page/${page}`;
   const html = (await axios.get(url)).data;
-  const $ = load(html);
+  const $ = cheerio.load(html);
   return $('.collection_table .collection_thumbnail')
     .map((i, el) => {
       const href = $(el).parent().attr('href');
@@ -74,7 +74,6 @@ export async function getCandidates() {
       const json = await fs.readFile(CACHE_FILE, 'utf-8');
       return JSON.parse(json);
     }
-  } catch {};
-  // cache missing or stale
+  } catch {}
   return await buildCandidates();
 }
