@@ -55,3 +55,35 @@ app.post('/recommend', async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`🚀 Recommender API running on port ${PORT}`));
+
+      name: c.name,
+      image: c.image,
+      reason: c.score > 0
+        ? `Matches your favorite games with a score of ${c.score}.`
+        : 'Recommended as a popular game you might enjoy.',
+    }));
+}
+
+app.post('/recommend', async (req, res) => {
+  const favorites = req.body.favorites;
+  if (!Array.isArray(favorites) || favorites.length === 0) {
+    return res.status(400).json({ error: 'No favorites provided.' });
+  }
+
+  try {
+    // Ensure dependencies are installed
+    // Run in shell: npm install express cors axios cheerio xml2js
+
+    const candidates = await getCandidates();
+    console.log('Loaded candidates count:', candidates.length);
+
+    const recommendations = computeRecommendations(candidates, favorites);
+    res.json({ recommendations });
+  } catch (err) {
+    console.error('Error generating recommendations:', err);
+    res.status(500).json({ error: 'Failed to generate recommendations.' });
+  }
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Recommender API running on port ${PORT}`));
