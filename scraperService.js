@@ -1,8 +1,6 @@
-// scraperService.js — Integrated candidate-scraper & cache for your backend
-// This module fetches, caches, and returns a top-2000 'candidates.json' automatically.
-
+// scraperService.js — Corrected cheerio import for ES Modules
 import axios from 'axios';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import xml2js from 'xml2js';
 import fs from 'fs/promises';
 import path from 'path';
@@ -16,14 +14,12 @@ async function scrapeBrowsePage(page) {
   const url = `https://boardgamegeek.com/browse/boardgame/page/${page}`;
   const html = (await axios.get(url)).data;
   const $ = cheerio.load(html);
-  return $('.collection_table .collection_thumbnail')
-    .map((i, el) => {
-      const href = $(el).parent().attr('href');
-      const id = href.split('/')[2];
-      const image = $(el).find('img').attr('src');
-      return { id, image };
-    })
-    .get();
+  return $('.collection_table .collection_thumbnail').map((i, el) => {
+    const href = $(el).parent().attr('href');
+    const id = href.split('/')[2];
+    const image = $(el).find('img').attr('src');
+    return { id, image };
+  }).get();
 }
 
 // Fetch BGG XML details for one game ID
