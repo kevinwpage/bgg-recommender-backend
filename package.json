@@ -1,0 +1,17 @@
+{
+  "name": "backend-setup",
+  "version": "1.0.0",
+  "main": "scraperService.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "xml2js": "^0.6.2"
+  }
+}
