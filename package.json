@@ -1,4 +1,4 @@
-"type": "module",
+{"type": "module",
 "scripts": {
   "start": "node server.js"
 },
