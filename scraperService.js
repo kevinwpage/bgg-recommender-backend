@@ -76,3 +76,4 @@ export async function getCandidates() {
   // cache missing or stale
   return await buildCandidates();
 }
+
